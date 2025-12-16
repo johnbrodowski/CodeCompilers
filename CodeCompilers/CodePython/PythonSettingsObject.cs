@@ -106,10 +106,7 @@ namespace AnthropicApp.Python
                     if (installed)
                     {
                         status.AppendLine($"Python {version}: Installed");
-                        //continue;
                     }
-
-                    // status.AppendLine($"Python {version}: {(installed ? "Installed" : "Not Installed!")}");
                 }
             }
             else
@@ -136,24 +133,6 @@ namespace AnthropicApp.Python
                 }
             }
         }
-
-        //// Method to update PythonVersion and paths
-        //public void UpdatePythonVersion(string newVersion)
-        //{
-        //    //if (string.IsNullOrEmpty(newVersion))
-        //    //    throw new ArgumentException("Python version cannot be null or empty.");
-
-        //    //if (Version != newVersion)
-        //    //{
-        //    //    TrySetVersion(newVersion);
-        //    //    UpdateProjectCompilePath();
-        //    //}
-        //    //else
-        //    //{
-        //    //    PythonObjectValues();
-        //    //}
-        //}
-
 
         public bool TrySetVersion(string version)
         {

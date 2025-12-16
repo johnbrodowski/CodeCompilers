@@ -16,8 +16,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-using CodeCompilers.CodePython;
-
 namespace AnthropicApp
 {
     public class PythonManager : IDisposable
@@ -470,30 +468,6 @@ namespace AnthropicApp
         }
 
         /// <summary>
-        /// Gets Editor state configuration for a project
-        /// </summary>
-        public async Task<IdeStateConfiguration?> GetProjectConfigurationAsync(string projectName)
-        {
-            if (string.IsNullOrEmpty(projectName))
-                return null;
-
-            var filePath = Path.Combine(Directory.GetCurrentDirectory(), "Editor_States", $"{projectName}.idestates.json");
-            if (!File.Exists(filePath))
-                return null;
-
-            try
-            {
-                var json = await File.ReadAllTextAsync(filePath);
-                return JsonSerializer.Deserialize<IdeStateConfiguration>(json);
-            }
-            catch (Exception ex)
-            {
-                Debug.WriteLine($"Error loading project configuration: {ex.Message}");
-                return null;
-            }
-        }
-
-        /// <summary>
         /// Saves Editor content to a file
         /// </summary>
         public async Task SaveIdeContentToFileAsync(string ideId, string filePath, bool overwrite = false)
@@ -880,153 +854,6 @@ pause";
 
 
 
-        /*
-        public async Task ExecutePythonScript(string scriptName, string scriptPath, string pythonExePath, string workingDirectory, string RequestID = "0000")
-        {
-            if (!File.Exists(scriptPath))
-            {
-                OnErrorOccurred($"Script file not found: {scriptPath}", RequestID);
-                return;
-            }
-
-            if (!File.Exists(pythonExePath))
-            {
-                OnErrorOccurred($"Python executable not found: {pythonExePath}", RequestID);
-                return;
-            }
-
-            ProcessStartInfo startInfo = new ProcessStartInfo
-            {
-                FileName = pythonExePath,
-                Arguments = $"-u \"{scriptPath}\"",  // -u flag ensures unbuffered output
-                WorkingDirectory = workingDirectory,
-                UseShellExecute = false,
-                RedirectStandardOutput = true,
-                RedirectStandardError = true,
-                RedirectStandardInput = true,
-                CreateNoWindow = true
-            };
-
-            Process process = new Process { StartInfo = startInfo };
-
-            // Set up event handlers for process output
-            var outputBuffer = new StringBuilder();
-            var errorBuffer = new StringBuilder();
-
-            process.OutputDataReceived += (sender, e) =>
-            {
-                if (!string.IsNullOrEmpty(e.Data))
-                {
-                    lock (outputBuffer)
-                    {
-                        outputBuffer.AppendLine(e.Data);
-                    }
-                    OnOutPutMessage(e.Data, RequestID);
-                }
-            };
-
-            process.ErrorDataReceived += (sender, e) =>
-            {
-                if (!string.IsNullOrEmpty(e.Data))
-                {
-                    lock (errorBuffer)
-                    {
-                        errorBuffer.AppendLine(e.Data);
-                    }
-                    OnExecuteError(e.Data, RequestID, Code);
-                }
-            };
-
-            try
-            {
-                process.Start();
-
-                // Start reading output and error asynchronously
-                process.BeginOutputReadLine();
-                process.BeginErrorReadLine();
-
-                // Store the process reference so it can be accessed later for input
-                lock (_processLock)
-                {
-                    _runningProcesses[RequestID] = process;
-                }
-
-                // Wait for the process to exit
-                try
-                {
-                    await Task.Run(() => process.WaitForExit(PROCESS_TIMEOUT_MS));
-
-                    if (!process.HasExited)
-                    {
-                        OnStatusUpdated("Process is taking too long, attempting to terminate...", RequestID);
-                        try
-                        {
-                            process.Kill();
-                            OnExecuteError("Process execution timed out and was terminated", RequestID, Code);
-                        }
-                        catch (Exception ex)
-                        {
-                            OnErrorOccurred($"Failed to terminate process: {ex.MessageAnthropic}", RequestID);
-                        }
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnErrorOccurred($"Error waiting for process: {ex.MessageAnthropic}", RequestID);
-                }
-
-                // Check if there was an error
-                bool hasError = process.ExitCode != 0;
-                if (hasError)
-                {
-                    string errorMessage = "An error occurred during execution";
-                    lock (errorBuffer)
-                    {
-                        if (errorBuffer.Length > 0)
-                        {
-                            errorMessage = errorBuffer.ToString();
-                        }
-                    }
-                    OnExecuteError(errorMessage, RequestID, Code);
-                }
-                else
-                {
-                    // Success case
-                    string output = "";
-                    lock (outputBuffer)
-                    {
-                        output = outputBuffer.ToString();
-                    }
-                    OnExecuteSuccess($"Execution completed successfully.\n{output}", RequestID);
-                    OnComplete("Execution completed successfully.");
-                }
-            }
-            catch (Exception ex)
-            {
-                OnErrorOccurred($"Error executing Python script: {ex.MessageAnthropic}", RequestID);
-            }
-            finally
-            {
-                // Remove the process reference
-                lock (_processLock)
-                {
-                    _runningProcesses.Remove(RequestID);
-                }
-
-                // Dispose resources
-                try
-                {
-                    if (!process.HasExited)
-                    {
-                        process.Kill();
-                    }
-                    process.Dispose();
-                }
-                catch { }
-            }
-        }
-
-        */
 
 
         private async Task<bool> RunVenvCheckScript(PythonSettingsObject pythonObject)
@@ -1321,7 +1148,6 @@ else:
 
         private bool VirtualEnvExists(PythonSettingsObject pythonObject)
         {
-            //string pythonExePath = Path.Combine(pythonObject.VirtualEnvironmentProjectFolder, $"{VirtualEnvironmentName}\\Scripts\\python.exe");
             return File.Exists(pythonObject.VirtualEnvironmentPythonExePath);
         }
 
@@ -1553,20 +1379,6 @@ else:
 
         #region Batch & Environment Setup Helpers
 
-        //public void InstallPython(string projectCompilePath, string version)
-        //{
-        //    string filePath = Path.Combine(projectCompilePath, "py_pip.bat");
-        //    string batchContent = GetPythonInstallBatchContent(version);
-        //    File.WriteAllText(filePath, batchContent);
-        //    Process.Start(new ProcessStartInfo
-        //    {
-        //        FileName = filePath,
-        //        UseShellExecute = true,
-        //        Verb = "runas"
-        //    })?.WaitForExit();
-        //}
-
- 
         public async Task SetupEnvironmentAndRunScriptAsync(PythonSettingsObject pythonObject)
         {
             try
@@ -1578,14 +1390,7 @@ else:
                         OnStatusUpdated("Python is installed, env will be setup if not found.", pythonObject.RequestID);
                     else
                     {
-
-                        //MessageBox.Show("Python is not installed. Please install Python and try again.");
-                        //OnErrorOccurred($"Python {pythonObject.Version} is not installed.", pythonObject.RequestID);
-                        //OnStatusUpdated($"Installing Python {pythonObject.Version} automatically...", pythonObject.RequestID);
-                        //string filePath = Path.Combine(pythonObject.VirtualEnvironmentProjectFolder, "py_pip.bat");
-                        //File.WriteAllText(filePath, GetPythonInstallBatchContent(pythonObject.Version));
-                        //Process.Start(filePath);
-                      //  MessageBox.Show("Python auto install Disabled!");
+                        // Python not installed - user needs to install manually
                     }
                 }
                 else
@@ -1623,12 +1428,6 @@ else:
                 return false;
             }
         }
-
-        //public void InstallCurlAndPython(string projectCompilePath, string version)
-        //{
-        //    // (Optional: check/install curl first)
-        //    InstallPython(projectCompilePath, version);
-        //}
 
         #endregion
 
@@ -1841,15 +1640,6 @@ else:
         public bool IsPipInstalled { get; set; }
         public List<string> InstalledPackages { get; set; }
     }
-
-    //public class IdeStateConfiguration
-    //{
-    //    public string ProjectName { get; set; }
-    //    public DateTime SavedAt { get; set; }
-    //    public List<PythonObject> States { get; set; }
-    //    public string ActiveIdeId { get; set; }
-    //    public Dictionary<string, string> ProjectMetadata { get; set; }
-    //}
 
     public static class PythonDirectories
     {

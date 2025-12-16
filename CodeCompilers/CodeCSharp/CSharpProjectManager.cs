@@ -90,7 +90,7 @@ namespace AnthropicApp.CSharp
             }
             catch (Exception ex)
             {
-                //  await Debugger($"An error occurred: {ex.MessageAnthropic}", Color.Red);
+                // Package parsing failed - continue without adding packages
             }
         }
 
