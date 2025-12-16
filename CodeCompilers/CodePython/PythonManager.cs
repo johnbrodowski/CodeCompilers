@@ -6,6 +6,7 @@ using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
  
 using System.Collections.Generic;
@@ -483,7 +484,7 @@ namespace AnthropicApp
             try
             {
                 var json = await File.ReadAllTextAsync(filePath);
-                return JsonConvert.DeserializeObject<IdeStateConfiguration>(json);
+                return JsonSerializer.Deserialize<IdeStateConfiguration>(json);
             }
             catch (Exception ex)
             {

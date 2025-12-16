@@ -1,33 +1,27 @@
-﻿using Newtonsoft.Json;
-
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 
 namespace CodeCompilers.CodePython
 {
     public class IdeStateConfiguration
     {
-        [JsonProperty("project_name", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("project_name")]
         public string? ProjectName { get; set; }
 
-
-
-        [JsonProperty("saved_at", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("saved_at")]
         public DateTime? SavedAt { get; set; }
 
+        [JsonPropertyName("states")]
+        public List<DynamicIdeObject>? States { get; set; }
 
-        [JsonProperty("states", NullValueHandling = NullValueHandling.Ignore)]
-        public List<DynamicIdeObject>? States { get; set; }  
-
-
-        [JsonProperty("active_id", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("active_id")]
         public string? ActiveIdeId { get; set; }
 
-
-        [JsonProperty("project_metadata", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("project_metadata")]
         public Dictionary<string, string>? ProjectMetadata { get; set; }
 
 
@@ -37,16 +31,14 @@ namespace CodeCompilers.CodePython
 
     public class ProjectMetadata
     {
-
-        [JsonProperty("last_edited_by", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("last_edited_by")]
         public string? LastEditedBy { get; set; } = null;
 
-        [JsonProperty("project_type", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("project_type")]
         public string? ProjectType { get; set; } = null;
 
-        [JsonProperty("project_description", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("project_description")]
         public string? ProjectDescription { get; set; }
- 
     }
 
 
