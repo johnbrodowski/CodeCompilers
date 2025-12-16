@@ -1,33 +1,32 @@
-﻿using Newtonsoft.Json;
-
-using System;
+﻿using System;
 using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace AnthropicApp.Python
 {
     public class PythonToolObject
     {
-        [JsonProperty("editor_id", NullValueHandling = NullValueHandling.Ignore)]
-        public string? editor_id { get; set; } 
+        [JsonPropertyName("editor_id")]
+        public string? editor_id { get; set; }
 
-        [JsonProperty("code", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("code")]
         public string? code { get; set; }
 
-        [JsonProperty("version", NullValueHandling = NullValueHandling.Ignore)]
-        public string? version { get; set; } 
+        [JsonPropertyName("version")]
+        public string? version { get; set; }
 
-        [JsonProperty("pip_commands", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("pip_commands")]
         public List<string>? pip_commands { get; set; }
- 
-        [JsonProperty("file_name", NullValueHandling = NullValueHandling.Ignore)]
+
+        [JsonPropertyName("file_name")]
         public string? file_name { get; set; }
 
-        [JsonProperty("project_path", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("project_path")]
         public string? project_path { get; set; }
 
-        [JsonProperty("file_path", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("file_path")]
         public string? file_path { get; set; }
 
         //[JsonProperty("venv_name", NullValueHandling = NullValueHandling.Ignore)]
@@ -36,7 +35,7 @@ namespace AnthropicApp.Python
         //[JsonProperty("overwrite", NullValueHandling = NullValueHandling.Ignore)]
         //public bool? overwrite { get; set; }  
 
-        [JsonProperty("project_description", NullValueHandling = NullValueHandling.Ignore)]
+        [JsonPropertyName("project_description")]
         public string? project_description { get; set; }
  
         //[JsonProperty("file_structure", NullValueHandling = NullValueHandling.Ignore)]

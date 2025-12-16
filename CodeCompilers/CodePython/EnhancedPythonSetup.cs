@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.IO;
 using System.Net;
 using System.Text;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -315,13 +316,16 @@ namespace AnthropicApp.Python
             // Parse the JSON output
             try
             {
-                var packages = JsonConvert.DeserializeObject<List<Dictionary<string, string>>>(output);
+                var packages = JsonSerializer.Deserialize<List<Dictionary<string, string>>>(output);
                 List<string> packageNames = new List<string>();
-                foreach (var pkg in packages)
+                if (packages != null)
                 {
-                    if (pkg.TryGetValue("name", out string name))
+                    foreach (var pkg in packages)
                     {
-                        packageNames.Add(name);
+                        if (pkg.TryGetValue("name", out string? name) && name != null)
+                        {
+                            packageNames.Add(name);
+                        }
                     }
                 }
                 return packageNames;
