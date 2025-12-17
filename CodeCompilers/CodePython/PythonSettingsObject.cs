@@ -55,11 +55,11 @@ namespace CodeCompilers.Python
             }
         }
 
-        public string? PipFilePath { get; private set; }
-        public string? VirtualEnvironmentProjectFolder { get; private set; }
-        public string? VirtualEnvironmentPath { get; private set; }
-        public string? VirtualEnvironmentScriptsPath { get; private set; }
-        public string? VirtualEnvironmentPythonExePath { get; private set; }
+        public string? PipFilePath { get;   set; }
+        public string? VirtualEnvironmentProjectFolder { get;   set; }
+        public string? VirtualEnvironmentPath { get;   set; }
+        public string? VirtualEnvironmentScriptsPath { get;   set; }
+        public string? VirtualEnvironmentPythonExePath { get;   set; }
         public string? VirtualEnvironmentRequirementsTxtPath { get; private set; }
 
         public readonly Dictionary<string, bool> _installedVersions = new()

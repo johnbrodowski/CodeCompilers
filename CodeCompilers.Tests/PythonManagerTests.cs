@@ -58,7 +58,7 @@ public class PythonManagerTests : IDisposable
             VirtualEnvironmentProjectFolder = _testDirectory,
             VirtualEnvironmentName = "test_venv",
             Code = "print('Hello from Python test!')",
-            PipCommands = "" // No packages needed
+            PipInstallCommands = "" // No packages needed
         };
 
         await manager.RunTheCode(settings);
@@ -90,7 +90,7 @@ public class PythonManagerTests : IDisposable
             VirtualEnvironmentProjectFolder = _testDirectory,
             VirtualEnvironmentName = "test_venv2",
             Code = "print('Test message 123')",
-            PipCommands = ""
+            PipInstallCommands = ""
         };
 
         await manager.RunTheCode(settings);
@@ -117,7 +117,7 @@ public class PythonManagerTests : IDisposable
             VirtualEnvironmentProjectFolder = _testDirectory,
             VirtualEnvironmentName = "test_venv3",
             Code = "print('Missing closing quote)",
-            PipCommands = ""
+            PipInstallCommands = ""
         };
 
         await manager.RunTheCode(settings);
