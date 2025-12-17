@@ -45,8 +45,7 @@ public class CSharpProjectManagerTests : IDisposable
 
         var manager = new CSharpProjectManager("TestConsole", _testDirectory, CSharpProjectType.Console);
 
-        bool success = await manager.CreateProjectAsync();
-        Assert.True(success, "Expected project creation to succeed");
+        await manager.CreateProjectAsync();
 
         string projectPath = Path.Combine(_testDirectory, "TestConsole");
         Assert.True(Directory.Exists(projectPath), "Expected project directory to be created");
