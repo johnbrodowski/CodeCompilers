@@ -8,7 +8,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AnthropicApp.Python
+namespace CodeCompilers.Python
 {
     public class EnhancedPythonSetup
     {
@@ -29,14 +29,28 @@ namespace AnthropicApp.Python
 
         private string? _workingDirectory = null;
      
+        /// <summary>
+        /// Initializes a new instance of the EnhancedPythonSetup class.
+        /// </summary>
+        /// <param name="customPythonPath">Optional custom path to Python installation. If not provided, attempts to use 'python' from PATH.</param>
+        /// <param name="workingDirectory">Optional working directory for operations.</param>
         public EnhancedPythonSetup(string? customPythonPath = null, string? workingDirectory = null)
         {
-
             this._workingDirectory = workingDirectory;
 
             _cancellationTokenSource = new CancellationTokenSource();
-            _pythonPath = customPythonPath ?? @"C:\Program Files (x86)\Microsoft Visual Studio\Shared\Python39_64";
-            _pythonExe = Path.Combine(_pythonPath, "python.exe");
+
+            if (customPythonPath != null)
+            {
+                _pythonPath = customPythonPath;
+                _pythonExe = Path.Combine(_pythonPath, "python.exe");
+            }
+            else
+            {
+                // Try to use python from PATH
+                _pythonExe = "python";
+                _pythonPath = string.Empty;
+            }
         }
 
        

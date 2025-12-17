@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using System.Text;
 
-namespace AnthropicApp.CodeRust
+namespace CodeCompilers.Rust
 {
  
         /// <summary>

@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace AnthropicApp.Go
+namespace CodeCompilers.Go
 {
     /// <summary>
     /// Manages the creation, building, and execution of Go projects.

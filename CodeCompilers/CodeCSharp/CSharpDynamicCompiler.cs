@@ -13,7 +13,7 @@ using System.Reflection;
 using System.Runtime.Loader;
 using System.Text.RegularExpressions;
 
-namespace AnthropicApp.CSharp
+namespace CodeCompilers.CSharp
 {
     /// <summary>
     /// Compiles and executes C# code dynamically using the Roslyn compiler API.

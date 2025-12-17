@@ -1,5 +1,5 @@
 ﻿
-using AnthropicApp.Python;
+using CodeCompilers.Python;
  
 using Microsoft.Win32;
 
@@ -16,8 +16,22 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace AnthropicApp
+namespace CodeCompilers.Python
 {
+    /// <summary>
+    /// Manages Python code execution with virtual environment support and package management.
+    /// Supports Python versions 3.8 through 3.13 with automatic virtual environment creation,
+    /// pip package installation, and asynchronous code execution.
+    /// </summary>
+    /// <example>
+    /// <code>
+    /// var manager = new PythonManager("3.11", "request-001");
+    /// manager.PyOutPutMessage += (s, e) => Console.WriteLine(e.Message);
+    ///
+    /// var settings = new PythonSettingsObject { Version = "3.11", Code = "print('Hello')" };
+    /// await manager.RunTheCode(settings);
+    /// </code>
+    /// </example>
     public class PythonManager : IDisposable
     {
         #region Fields & Constants

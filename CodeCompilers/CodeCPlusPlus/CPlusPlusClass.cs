@@ -12,22 +12,44 @@ public enum OutputMode
     Unified
 }
 
+/// <summary>
+/// Configuration options for the C++ compiler.
+/// </summary>
 public record CPlusPlusCompilerOptions
 {
+    /// <summary>
+    /// Path to the C++ compiler executable.
+    /// IMPORTANT: You must set this to your system's compiler path.
+    /// Examples:
+    /// - Windows LLVM: @"C:\Program Files\LLVM\bin\clang.exe"
+    /// - Windows Visual Studio: @"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\x64\bin\clang.exe"
+    /// - macOS: "/usr/bin/clang++"
+    /// - Linux: "/usr/bin/g++"
+    /// </summary>
     public string CompilerPath { get; init; } = @"C:\Program Files\Microsoft Visual Studio\2022\Community\VC\Tools\Llvm\x64\bin\clang.exe";
+
+    /// <summary>
+    /// Default compiler flags for console applications.
+    /// </summary>
     public string DefaultConsoleFlags { get; init; } = "-std=c++20 -pedantic -Wextra -Wall";
-    public string DefaultWindowsGuiFlags { get; init; } = 
+
+    /// <summary>
+    /// Default compiler flags for Windows GUI applications (Unicode).
+    /// </summary>
+    public string DefaultWindowsGuiFlags { get; init; } =
         "-std=c++20 -mwindows -lcomdlg32 -luser32 -lgdi32 -lwinspool -lshell32 -ladvapi32 -lkernel32 -DUNICODE -D_UNICODE";
 
-    // Flags for a legacy, non-Unicode (ANSI) application
-    public string DefaultWindowsGuiFlags_ANSI { get; init; } = 
+    /// <summary>
+    /// Default compiler flags for Windows GUI applications (ANSI/legacy).
+    /// </summary>
+    public string DefaultWindowsGuiFlags_ANSI { get; init; } =
         "-std=c++20 -mwindows -lcomdlg32 -luser32 -lgdi32 -lwinspool -lshell32 -ladvapi32 -lkernel32";
 
 }
 
 
 // ---- REFACTORED: The main compiler class ----
-namespace AnthropicApp.Cpp
+namespace CodeCompilers.Cpp
 {
     using System.Diagnostics;
     using System.Text;
