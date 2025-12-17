@@ -61,6 +61,10 @@ public class PythonManagerTests : IDisposable
             PipCommands = "" // No packages needed
         };
 
+        // Ensure the working directory exists before running
+        if (settings.VirtualEnvironmentProjectFolder != null)
+            Directory.CreateDirectory(settings.VirtualEnvironmentProjectFolder);
+
         await manager.RunTheCode(settings);
 
         // Give it time to execute and fire events
@@ -92,6 +96,10 @@ public class PythonManagerTests : IDisposable
             PipCommands = ""
         };
 
+        // Ensure the working directory exists before running
+        if (settings.VirtualEnvironmentProjectFolder != null)
+            Directory.CreateDirectory(settings.VirtualEnvironmentProjectFolder);
+
         await manager.RunTheCode(settings);
 
         await Task.Delay(2000);
@@ -117,6 +125,10 @@ public class PythonManagerTests : IDisposable
             Code = "print('Missing closing quote)",
             PipCommands = ""
         };
+
+        // Ensure the working directory exists before running
+        if (settings.VirtualEnvironmentProjectFolder != null)
+            Directory.CreateDirectory(settings.VirtualEnvironmentProjectFolder);
 
         await manager.RunTheCode(settings);
 
