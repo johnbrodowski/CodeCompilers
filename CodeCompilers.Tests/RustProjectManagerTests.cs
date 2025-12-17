@@ -1,4 +1,5 @@
 using CodeCompilers.Rust;
+using System.Diagnostics;
 using Xunit;
 
 namespace CodeCompilers.Tests;
@@ -29,16 +30,23 @@ public class RustProjectManagerTests : IDisposable
     [Fact]
     public void RustProjectManager_Constructor_CreatesInstance()
     {
+        Debug.WriteLine("RUNNING: RustProjectManager_Constructor_CreatesInstance");
         var manager = new RustProjectManager("test_rust_app", _testDirectory);
         Assert.NotNull(manager);
         Assert.Equal("test_rust_app", manager.ProjectName);
+        Debug.WriteLine("PASSED: RustProjectManager_Constructor_CreatesInstance");
     }
 
     [Fact]
     public async Task CreateProjectAsync_InitializesCargoProject()
     {
         if (!DependencyDetector.IsRustAvailable())
-            return; // Skip if Rust/Cargo not installed
+        {
+            Debug.WriteLine("SKIPPED: CreateProjectAsync_InitializesCargoProject - Rust/Cargo not installed");
+            return;
+        }
+
+        Debug.WriteLine("RUNNING: CreateProjectAsync_InitializesCargoProject");
 
         var manager = new RustProjectManager("rusttest", _testDirectory);
 

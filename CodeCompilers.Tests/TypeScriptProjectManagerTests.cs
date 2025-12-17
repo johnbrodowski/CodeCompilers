@@ -1,4 +1,5 @@
 using CodeCompilers.TypeScript;
+using System.Diagnostics;
 using Xunit;
 
 namespace CodeCompilers.Tests;
@@ -29,16 +30,23 @@ public class TypeScriptProjectManagerTests : IDisposable
     [Fact]
     public void TypeScriptProjectManager_Constructor_CreatesInstance()
     {
+        Debug.WriteLine("RUNNING: TypeScriptProjectManager_Constructor_CreatesInstance");
         var manager = new TypeScriptProjectManager("TestTsApp", _testDirectory);
         Assert.NotNull(manager);
         Assert.Equal("TestTsApp", manager.ProjectName);
+        Debug.WriteLine("PASSED: TypeScriptProjectManager_Constructor_CreatesInstance");
     }
 
     [Fact]
     public async Task CreateProjectAsync_CreatesProjectFiles()
     {
         if (!DependencyDetector.IsTypeScriptAvailable() || !DependencyDetector.IsNodeAvailable())
-            return; // Skip if TypeScript or Node not installed
+        {
+            Debug.WriteLine("SKIPPED: CreateProjectAsync_CreatesProjectFiles - TypeScript or Node not installed");
+            return;
+        }
+
+        Debug.WriteLine("RUNNING: CreateProjectAsync_CreatesProjectFiles");
 
         var manager = new TypeScriptProjectManager("tstest", _testDirectory);
 

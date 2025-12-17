@@ -1,4 +1,5 @@
 using CodeCompilers.CSharp;
+using System.Diagnostics;
 using Xunit;
 using Xunit.Abstractions;
 
@@ -33,18 +34,27 @@ public class CSharpDynamicCompilerTests : IDisposable
     public void CSharpDynamicCompiler_Constructor_CreatesInstance()
     {
         if (!DependencyDetector.IsDotNetAvailable())
+        {
+            Debug.WriteLine("SKIPPED: CSharpDynamicCompiler_Constructor_CreatesInstance - .NET SDK not available");
             return;
+        }
 
+        Debug.WriteLine("RUNNING: CSharpDynamicCompiler_Constructor_CreatesInstance");
         var compiler = new CSharpDynamicCompiler(_testCacheDirectory);
         Assert.NotNull(compiler);
+        Debug.WriteLine("PASSED: CSharpDynamicCompiler_Constructor_CreatesInstance");
     }
 
     [Fact]
     public async Task RunFromCodeAsync_SimpleCalculation_ExecutesSuccessfully()
     {
         if (!DependencyDetector.IsDotNetAvailable())
+        {
+            Debug.WriteLine("SKIPPED: RunFromCodeAsync_SimpleCalculation_ExecutesSuccessfully - .NET SDK not available");
             return;
+        }
 
+        Debug.WriteLine("RUNNING: RunFromCodeAsync_SimpleCalculation_ExecutesSuccessfully");
         var compiler = new CSharpDynamicCompiler(_testCacheDirectory);
 
         // Use minimal code that doesn't require Console

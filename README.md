@@ -14,14 +14,18 @@ A comprehensive .NET library for compiling and executing code in multiple progra
 
 ## 📦 Supported Languages
 
-| Language | Compiler/Runtime | Features |
-|----------|-----------------|----------|
-| **Python** | CPython 3.8-3.13 | Virtual environments, pip packages, multiple versions |
-| **C#** | Roslyn + dotnet CLI | Dynamic compilation, NuGet packages, project generation |
-| **Go** | go CLI | Module management, build & run |
-| **Rust** | Cargo | Crate dependencies, build & run |
-| **TypeScript** | tsc + Node.js | NPM packages, transpilation |
-| **C++** | Clang/MSVC | Configurable compiler flags, Windows GUI support |
+| Language | Status | Compiler/Runtime | Features |
+|----------|--------|-----------------|----------|
+| **Python** | ✅ Tested | CPython 3.8-3.13 | Virtual environments, pip packages, multiple versions |
+| **C#** | ✅ Tested | Roslyn + dotnet CLI | Dynamic compilation, NuGet packages, project generation |
+| **C++** | ✅ Tested | Clang/MSVC | Configurable compiler flags, Windows GUI support |
+| **Go** | ⚠️ Experimental | go CLI | Module management, build & run |
+| **Rust** | ⚠️ Experimental | Cargo | Crate dependencies, build & run |
+| **TypeScript** | ⚠️ Experimental | tsc + Node.js | NPM packages, transpilation |
+
+**Legend:**
+- ✅ **Tested** - Fully tested with comprehensive test suite
+- ⚠️ **Experimental** - Code complete but not yet tested; contributions welcome!
 
 ## 🔧 Installation
 
@@ -413,6 +417,17 @@ public class LanguageManager
 ## 🤝 Contributing
 
 Contributions are welcome! Please feel free to submit pull requests or open issues.
+
+### Help Wanted: Testing Experimental Languages
+
+The **Go, Rust, and TypeScript** implementations are code-complete but haven't been tested yet. If you have these tools installed, we'd love your help:
+
+1. Run the test suite: `dotnet test`
+2. Report any failures or issues
+3. Submit fixes if you find bugs
+4. Add more comprehensive tests
+
+These languages need real-world validation to move from ⚠️ Experimental to ✅ Tested status.
 
 ### Areas for Improvement
 
