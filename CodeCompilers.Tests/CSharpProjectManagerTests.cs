@@ -1,4 +1,5 @@
 using CodeCompilers.CSharp;
+using System.Diagnostics;
 using Xunit;
 
 namespace CodeCompilers.Tests;
@@ -30,11 +31,16 @@ public class CSharpProjectManagerTests : IDisposable
     public void CSharpProjectManager_Constructor_CreatesInstance()
     {
         if (!DependencyDetector.IsDotNetAvailable())
+        {
+            Debug.WriteLine("SKIPPED: CSharpProjectManager_Constructor_CreatesInstance - .NET SDK not available");
             return;
+        }
 
+        Debug.WriteLine("RUNNING: CSharpProjectManager_Constructor_CreatesInstance");
         var manager = new CSharpProjectManager("TestProject", _testDirectory, CSharpProjectType.Console);
         Assert.NotNull(manager);
         Assert.Equal("TestProject", manager.ProjectName);
+        Debug.WriteLine("PASSED: CSharpProjectManager_Constructor_CreatesInstance");
     }
 
     [Fact]

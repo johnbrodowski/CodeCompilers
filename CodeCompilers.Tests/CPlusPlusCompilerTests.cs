@@ -1,4 +1,5 @@
 using CodeCompilers.Cpp;
+using System.Diagnostics;
 using Xunit;
 
 namespace CodeCompilers.Tests;
@@ -31,7 +32,12 @@ public class CPlusPlusCompilerTests : IDisposable
     {
         string? compilerPath = DependencyDetector.GetCppCompilerPath();
         if (compilerPath == null)
-            return; // Skip if no C++ compiler available
+        {
+            Debug.WriteLine("SKIPPED: CPlusPlusCompiler_Constructor_CreatesInstance - No C++ compiler available");
+            return;
+        }
+
+        Debug.WriteLine($"RUNNING: CPlusPlusCompiler_Constructor_CreatesInstance (using {compilerPath})");
 
         var options = new CPlusPlusCompilerOptions
         {
@@ -40,6 +46,7 @@ public class CPlusPlusCompilerTests : IDisposable
 
         var compiler = new CPlusPlusCompiler(options);
         Assert.NotNull(compiler);
+        Debug.WriteLine("PASSED: CPlusPlusCompiler_Constructor_CreatesInstance");
     }
 
     [Fact]
@@ -47,7 +54,12 @@ public class CPlusPlusCompilerTests : IDisposable
     {
         string? compilerPath = DependencyDetector.GetCppCompilerPath();
         if (compilerPath == null)
+        {
+            Debug.WriteLine("SKIPPED: CompileAsync_SimpleProgram_CompilesSuccessfully - No C++ compiler available");
             return;
+        }
+
+        Debug.WriteLine($"RUNNING: CompileAsync_SimpleProgram_CompilesSuccessfully (using {compilerPath})");
 
         var options = new CPlusPlusCompilerOptions
         {

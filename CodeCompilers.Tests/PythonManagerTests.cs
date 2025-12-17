@@ -1,4 +1,5 @@
 using CodeCompilers.Python;
+using System.Diagnostics;
 using Xunit;
 
 namespace CodeCompilers.Tests;
@@ -36,22 +37,35 @@ public class PythonManagerTests : IDisposable
     public void PythonManager_Constructor_CreatesInstance()
     {
         if (!DependencyDetector.IsPythonAvailable())
+        {
+            Debug.WriteLine("SKIPPED: PythonManager_Constructor_CreatesInstance - Python not available");
             return;
+        }
 
+        Debug.WriteLine("RUNNING: PythonManager_Constructor_CreatesInstance");
         using var manager = new PythonManager("3.11", "test-001");
         Assert.NotNull(manager);
+        Debug.WriteLine("PASSED: PythonManager_Constructor_CreatesInstance");
     }
 
     [Fact]
     public async Task RunTheCode_SimpleScript_ExecutesSuccessfully()
     {
         if (!DependencyDetector.IsPythonAvailable())
+        {
+            Debug.WriteLine("SKIPPED: RunTheCode_SimpleScript_ExecutesSuccessfully - Python not available");
             return;
+        }
 
+        Debug.WriteLine("RUNNING: RunTheCode_SimpleScript_ExecutesSuccessfully");
         using var manager = new PythonManager("3.11", "test-002");
 
         bool outputReceived = false;
-        manager.PyOutPutMessage += (s, e) => outputReceived = true;
+        manager.PyOutPutMessage += (s, e) =>
+        {
+            Debug.WriteLine($"[Python Output] {e.Message}");
+            outputReceived = true;
+        };
 
         var settings = new PythonSettingsObject
         {
@@ -70,20 +84,27 @@ public class PythonManagerTests : IDisposable
         // Give it time to execute and fire events
         await Task.Delay(2000);
 
+        Debug.WriteLine($"Output received: {outputReceived}");
         Assert.True(outputReceived, "Expected to receive output from Python execution");
+        Debug.WriteLine("PASSED: RunTheCode_SimpleScript_ExecutesSuccessfully");
     }
 
     [Fact]
     public async Task RunTheCode_PrintStatement_FiresOutputEvent()
     {
         if (!DependencyDetector.IsPythonAvailable())
+        {
+            Debug.WriteLine("SKIPPED: RunTheCode_PrintStatement_FiresOutputEvent - Python not available");
             return;
+        }
 
+        Debug.WriteLine("RUNNING: RunTheCode_PrintStatement_FiresOutputEvent");
         using var manager = new PythonManager("3.11", "test-003");
 
         string? receivedOutput = null;
         manager.PyOutPutMessage += (s, e) =>
         {
+            Debug.WriteLine($"[Python Output] {e.Message}");
             if (e.Message.Contains("Test message 123"))
                 receivedOutput = e.Message;
         };
@@ -104,15 +125,21 @@ public class PythonManagerTests : IDisposable
 
         await Task.Delay(2000);
 
+        Debug.WriteLine($"Received output: {receivedOutput}");
         Assert.NotNull(receivedOutput);
+        Debug.WriteLine("PASSED: RunTheCode_PrintStatement_FiresOutputEvent");
     }
 
     [Fact]
     public async Task RunTheCode_SyntaxError_HandlesGracefully()
     {
         if (!DependencyDetector.IsPythonAvailable())
+        {
+            Debug.WriteLine("SKIPPED: RunTheCode_SyntaxError_HandlesGracefully - Python not available");
             return;
+        }
 
+        Debug.WriteLine("RUNNING: RunTheCode_SyntaxError_HandlesGracefully");
         using var manager = new PythonManager("3.11", "test-004");
 
         bool errorReceived = false;
@@ -120,12 +147,14 @@ public class PythonManagerTests : IDisposable
 
         manager.PyErrorOccurred += (s, e) =>
         {
+            Debug.WriteLine($"[Python Error] {e.Message}");
             errorReceived = true;
             anyEventReceived = true;
         };
 
         manager.PyOutPutMessage += (s, e) =>
         {
+            Debug.WriteLine($"[Python Output] {e.Message}");
             anyEventReceived = true;
             // Syntax errors might appear in output instead of error events
             if (e.Message.Contains("SyntaxError") || e.Message.Contains("invalid syntax"))
@@ -154,21 +183,28 @@ public class PythonManagerTests : IDisposable
 
         // We expect either an error event or some output
         // The important thing is the manager doesn't crash
+        Debug.WriteLine($"Error received: {errorReceived}, Any event: {anyEventReceived}");
         Assert.True(anyEventReceived || errorReceived,
             "Expected to receive some event from Python execution (error or output)");
+        Debug.WriteLine("PASSED: RunTheCode_SyntaxError_HandlesGracefully");
     }
 
     [Fact]
     public void Dispose_CalledMultipleTimes_DoesNotThrow()
     {
         if (!DependencyDetector.IsPythonAvailable())
+        {
+            Debug.WriteLine("SKIPPED: Dispose_CalledMultipleTimes_DoesNotThrow - Python not available");
             return;
+        }
 
+        Debug.WriteLine("RUNNING: Dispose_CalledMultipleTimes_DoesNotThrow");
         var manager = new PythonManager("3.11", "test-005");
 
         manager.Dispose();
         manager.Dispose(); // Should not throw
 
         Assert.True(true); // If we get here, test passed
+        Debug.WriteLine("PASSED: Dispose_CalledMultipleTimes_DoesNotThrow");
     }
 }

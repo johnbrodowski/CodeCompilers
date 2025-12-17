@@ -1,4 +1,5 @@
 using CodeCompilers.Go;
+using System.Diagnostics;
 using Xunit;
 
 namespace CodeCompilers.Tests;
@@ -29,16 +30,23 @@ public class GoProjectManagerTests : IDisposable
     [Fact]
     public void GoProjectManager_Constructor_CreatesInstance()
     {
+        Debug.WriteLine("RUNNING: GoProjectManager_Constructor_CreatesInstance");
         var manager = new GoProjectManager("github.com/test/myapp", _testDirectory);
         Assert.NotNull(manager);
         Assert.Equal("github.com/test/myapp", manager.ModuleName);
+        Debug.WriteLine("PASSED: GoProjectManager_Constructor_CreatesInstance");
     }
 
     [Fact]
     public async Task CreateProjectAsync_InitializesGoModule()
     {
         if (!DependencyDetector.IsGoAvailable())
-            return; // Skip if Go not installed
+        {
+            Debug.WriteLine("SKIPPED: CreateProjectAsync_InitializesGoModule - Go not installed");
+            return;
+        }
+
+        Debug.WriteLine("RUNNING: CreateProjectAsync_InitializesGoModule");
 
         var manager = new GoProjectManager("github.com/test/gotest", _testDirectory);
 
@@ -53,7 +61,12 @@ public class GoProjectManagerTests : IDisposable
     public async Task AddCodeFileAsync_CreatesMainGo()
     {
         if (!DependencyDetector.IsGoAvailable())
+        {
+            Debug.WriteLine("SKIPPED: AddCodeFileAsync_CreatesMainGo - Go not installed");
             return;
+        }
+
+        Debug.WriteLine("RUNNING: AddCodeFileAsync_CreatesMainGo");
 
         var manager = new GoProjectManager("github.com/test/gocode", _testDirectory);
         await manager.CreateProjectAsync();
@@ -77,7 +90,12 @@ func main() {
     public async Task RunAsync_SimpleProgram_ExecutesSuccessfully()
     {
         if (!DependencyDetector.IsGoAvailable())
+        {
+            Debug.WriteLine("SKIPPED: RunAsync_SimpleProgram_ExecutesSuccessfully - Go not installed");
             return;
+        }
+
+        Debug.WriteLine("RUNNING: RunAsync_SimpleProgram_ExecutesSuccessfully");
 
         var manager = new GoProjectManager("github.com/test/gorun", _testDirectory);
 
