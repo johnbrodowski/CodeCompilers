@@ -147,7 +147,7 @@ public class PythonManagerTests : IDisposable
 
         manager.PyErrorOccurred += (s, e) =>
         {
-            Debug.WriteLine($"[Python Error] {e.Message}");
+            Debug.WriteLine($"[Python Error] {e.ErrorMessage}");
             errorReceived = true;
             anyEventReceived = true;
         };
