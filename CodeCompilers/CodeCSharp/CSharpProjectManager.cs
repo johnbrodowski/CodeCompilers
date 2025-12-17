@@ -6,7 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace AnthropicApp.CSharp
+namespace CodeCompilers.CSharp
 {
     /// <summary>
     /// Represents the type of C# project to create.

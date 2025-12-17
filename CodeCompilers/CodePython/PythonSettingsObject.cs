@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.Text;
 
-namespace AnthropicApp.Python
+namespace CodeCompilers.Python
 {
     public class PythonSettingsObject : INotifyPropertyChanged
     {

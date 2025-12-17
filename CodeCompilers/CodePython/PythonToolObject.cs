@@ -4,7 +4,7 @@ using System.Diagnostics;
 using System.Text;
 using System.Text.Json.Serialization;
 
-namespace AnthropicApp.Python
+namespace CodeCompilers.Python
 {
     public class PythonToolObject
     {
