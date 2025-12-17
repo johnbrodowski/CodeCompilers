@@ -5,37 +5,38 @@ namespace CodeCompilers.Tests;
 
 public class PythonManagerTests : IDisposable
 {
-    private readonly string _testDirectory;
+    private readonly string _cleanupDirectory;
 
     public PythonManagerTests()
     {
-        _testDirectory = Path.Combine(Path.GetTempPath(), $"PythonTests_{Guid.NewGuid():N}");
-        Directory.CreateDirectory(_testDirectory);
+        // PythonManager will create directories in the current working directory
+        // We'll track them for cleanup
+        _cleanupDirectory = Path.Combine(Directory.GetCurrentDirectory(), "PythonScripts_3_11");
     }
 
     public void Dispose()
     {
         try
         {
-            if (Directory.Exists(_testDirectory))
-                Directory.Delete(_testDirectory, recursive: true);
+            // Cleanup Python test directories
+            if (Directory.Exists(_cleanupDirectory))
+            {
+                // Give processes time to release file handles
+                Thread.Sleep(500);
+                Directory.Delete(_cleanupDirectory, recursive: true);
+            }
         }
         catch
         {
-            // Cleanup best effort
+            // Cleanup best effort - Python venv may have locked files
         }
     }
 
     [Fact]
     public void PythonManager_Constructor_CreatesInstance()
     {
-        // Skip if Python not available
         if (!DependencyDetector.IsPythonAvailable())
-        {
-            // In xUnit, we can use Skip but it requires a different attribute
-            // For now, just return early
             return;
-        }
 
         using var manager = new PythonManager("3.11", "test-001");
         Assert.NotNull(manager);
@@ -55,7 +56,6 @@ public class PythonManagerTests : IDisposable
         var settings = new PythonSettingsObject
         {
             Version = "3.11",
-            VirtualEnvironmentProjectFolder = _testDirectory,
             VirtualEnvironmentName = "test_venv",
             Code = "print('Hello from Python test!')",
             PipCommands = "" // No packages needed
@@ -63,8 +63,8 @@ public class PythonManagerTests : IDisposable
 
         await manager.RunTheCode(settings);
 
-        // Give it a moment to process events
-        await Task.Delay(500);
+        // Give it time to execute and fire events
+        await Task.Delay(2000);
 
         Assert.True(outputReceived, "Expected to receive output from Python execution");
     }
@@ -87,7 +87,6 @@ public class PythonManagerTests : IDisposable
         var settings = new PythonSettingsObject
         {
             Version = "3.11",
-            VirtualEnvironmentProjectFolder = _testDirectory,
             VirtualEnvironmentName = "test_venv2",
             Code = "print('Test message 123')",
             PipCommands = ""
@@ -95,7 +94,7 @@ public class PythonManagerTests : IDisposable
 
         await manager.RunTheCode(settings);
 
-        await Task.Delay(1000);
+        await Task.Delay(2000);
 
         Assert.NotNull(receivedOutput);
     }
@@ -114,7 +113,6 @@ public class PythonManagerTests : IDisposable
         var settings = new PythonSettingsObject
         {
             Version = "3.11",
-            VirtualEnvironmentProjectFolder = _testDirectory,
             VirtualEnvironmentName = "test_venv3",
             Code = "print('Missing closing quote)",
             PipCommands = ""
@@ -122,7 +120,7 @@ public class PythonManagerTests : IDisposable
 
         await manager.RunTheCode(settings);
 
-        await Task.Delay(1000);
+        await Task.Delay(2000);
 
         Assert.True(errorReceived, "Expected to receive error event for syntax error");
     }
