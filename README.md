@@ -1,3 +1,6 @@
+# About this code
+This example was extracted from AGPA — my fully autonomous general-purpose agent (closed-source, ~150k LOC).
+
 # CodeCompilers
 
 A comprehensive .NET library for compiling and executing code in multiple programming languages. Ideal for building code execution environments, educational tools, testing frameworks, and development tools.
